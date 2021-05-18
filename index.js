@@ -1,15 +1,29 @@
 "use strict";
-const http = require('http');
-const hostname = '127.0.0.1';
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const http_1 = __importDefault(require("http"));
+const fs_1 = __importDefault(require("fs"));
+const hostname = '127.0.0.1'; 
 const port = 3000;
-const server = http.createServer((req, res) => {
-    res.statusCode = 200;
-    res.setHeader('Content-Type', 'text/plain');
-    res.end('Hello World2');
+const server = http_1.default.createServer((req, res) => {
+    res.setHeader('Content-Type', 'text/html');
+    displayHome(res);
 });
-let myVariable = server.httplock;
-console.log(myVariable);
 server.listen(port, hostname, () => {
     console.log(`Server running at http://${hostname}:${port}/`);
 });
+function displayHome(res) {
+    fs_1.default.readFile("index.html", (err, data) => {
+        if (err) {
+            res.writeHead(404);
+            res.end("ERROR: 404 - Page Not found");
+            console.log(err);
+            return;
+        }
+        res.writeHead(200);
+        res.end(data);
+    });
+}
 //# sourceMappingURL=index.js.map
